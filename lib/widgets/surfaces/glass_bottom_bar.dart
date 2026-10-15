@@ -9,22 +9,22 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import '../../src/renderer/liquid_glass_renderer.dart';
 
+import '../../src/renderer/liquid_glass_renderer.dart';
+import '../../src/types/glass_interaction_behavior.dart';
+import '../../theme/glass_theme_data.dart';
+import '../../theme/glass_theme_helpers.dart';
 import '../../types/glass_quality.dart';
 import '../interactive/glass_button.dart';
 import '../shared/adaptive_liquid_glass_layer.dart';
 import '../shared/inherited_liquid_glass.dart';
-import '../../theme/glass_theme_data.dart';
-import '../../theme/glass_theme_helpers.dart';
-import '../../src/types/glass_interaction_behavior.dart';
+import 'shared/bar_layout_utils.dart';
 import 'shared/bottom_bar_internal.dart'
     show
         BottomBarExtraBtn,
         BottomBarTabItem,
         TabIndicator,
         kBottomBarGlassDefaults;
-import 'shared/bar_layout_utils.dart';
 
 /// A glass morphism bottom navigation bar following Apple's design patterns.
 ///
@@ -194,6 +194,7 @@ class GlassBottomBar extends StatefulWidget {
     this.spacing = 8,
     this.horizontalPadding = 20,
     this.verticalPadding = 20,
+    this.padding,
     this.barHeight = 64,
     this.barBorderRadius = _defaultBarBorderRadius,
     this.tabPadding = const EdgeInsets.symmetric(horizontal: 4),
@@ -378,6 +379,11 @@ class GlassBottomBar extends StatefulWidget {
   ///
   /// Defaults to 20.
   final double verticalPadding;
+
+  /// Padding around the entire bottom bar content.
+  ///
+
+  final EdgeInsetsGeometry? padding;
 
   /// Height of the tab bar.
   ///
@@ -567,10 +573,11 @@ class _GlassBottomBarState extends State<GlassBottomBar> {
       blendAmount:
           widget.blendAmount, // Impeller-only (gracefully ignored on Skia)
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: widget.horizontalPadding,
-          vertical: widget.verticalPadding,
-        ),
+        padding: widget.padding ??
+            EdgeInsets.symmetric(
+              horizontal: widget.horizontalPadding,
+              vertical: widget.verticalPadding,
+            ),
         child: LayoutBuilder(
           builder: (context, constraints) {
             // Compute how much width the extra button consumes, if present.
